@@ -13,7 +13,7 @@ classdef CPlotGroup < handle
         Canvas = 50;
         BPG_Length = 100; % Button of PG length           
         
-        AxesArr = zeros(6, 6); % Posible place of axes        
+        AxesArr    
         AxesCounter 
         A % Axes Handles List
         AxesFunction
@@ -23,7 +23,8 @@ classdef CPlotGroup < handle
     
     methods
         
-        function PG = CPlotGroup(parent, CounterValue, Name, Position, BPGP)
+        function PG = CPlotGroup(parent, CounterValue, Name, Position, BPGP, ButName, xa, ya)
+            PG.AxesArr = zeros(ya, xa);
             PG.pan_handle = uipanel(parent, 'Title', Name, ... % Frame on MW
                             'BackgroundColor', get(parent, 'Color'));
             set(PG.pan_handle, 'Units', 'pixels');
@@ -34,7 +35,7 @@ classdef CPlotGroup < handle
             PG.but_handle = uicontrol(BPGP.handle, 'Style', 'pushbutton', 'Units', 'pixels');
             set(PG.but_handle, 'Position', [round(BPGP.Height*0.125) + round((CounterValue-1)*PG.BPG_Length*1.1), ...
                 round(BPGP.Height*0.125), PG.BPG_Length, round(BPGP.Height*0.75)], ...
-                'String', 'PG1');
+                'String', ButName);
             set(PG.but_handle, 'Callback', ['MW.PG{' num2str(CounterValue) '}.BtnDwn(MW)']);
         end
         
@@ -85,6 +86,7 @@ classdef CPlotGroup < handle
             end
             
             y0 = maxy - y0 + 1; % From top left
+            yend = maxy - yend + 1; % From top left
             
             pos(1) = (PG.Width/maxx) * (x0-1) + PG.Canvas; 
             pos(2) = (PG.Height/maxy) * (y0-1) + PG.Canvas; 
@@ -99,7 +101,7 @@ classdef CPlotGroup < handle
                 set(PG.A(PG.AxesCounter), 'Units', 'pixels');
                 set(PG.A(PG.AxesCounter), 'FontSize', PG.FontSize);                
                 set(PG.A(PG.AxesCounter), 'Position', pos);
-                PG.AxesFunction{PG.AxesCounter} = [Func  '(PG.A(' num2str(PG.AxesCounter) ', 0)' ];
+                PG.AxesFunction{PG.AxesCounter} = [Func  '(PG.A(' num2str(PG.AxesCounter) '), 0)' ];
                 Func = [Func sprintf('(%02.0f%02.0f, 1)', PG.PG_CounterVal, PG.AxesCounter)];
                 set(PG.A(PG.AxesCounter), 'ButtonDownFcn', Func);
             end
@@ -112,12 +114,12 @@ classdef CPlotGroup < handle
         end
             
         function BtnDwn(PG, MW)
-            MW.set_Active_PG(PG.PG_CounterVal);
+            MW.setActivePG(PG.PG_CounterVal);
         end
         
         function plotAll(PG)
             for i = 1:PG.AxesCounter
-                eval(PG.AxesFunction{PG.AxesCounter});
+                eval(PG.AxesFunction{i});
             end
         end
     end
