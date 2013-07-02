@@ -85,13 +85,13 @@ classdef CPlotGroup < handle
                 end
             end
             
-            y0 = maxy - y0 + 1; % From top left
-            yend = maxy - yend + 1; % From top left
+            y0_pos = maxy - y0 + 1; % From top left
+            yend_pos = maxy - yend + 1; % From top left
             
             pos(1) = (PG.Width/maxx) * (x0-1) + PG.Canvas; 
-            pos(2) = (PG.Height/maxy) * (y0-1) + PG.Canvas; 
+            pos(2) = (PG.Height/maxy) * (y0_pos-1) + PG.Canvas; 
             pos(3) = (PG.Width/maxx) * (xend - x0 + 1) - 2*PG.Canvas;
-            pos(4) = (PG.Height/maxy) * (yend - y0 + 1) - 2*PG.Canvas;
+            pos(4) = (PG.Height/maxy) * (yend_pos - y0_pos + 1) - 2*PG.Canvas;
             
             if (pos(3) > 1)&&(pos(4) > 1) % All OK?
                 erro = 0;
@@ -115,6 +115,9 @@ classdef CPlotGroup < handle
             
         function BtnDwn(PG, MW)
             MW.setActivePG(PG.PG_CounterVal);
+            try
+                PG.plotAll();
+            end
         end
         
         function plotAll(PG)
