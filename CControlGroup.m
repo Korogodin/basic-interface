@@ -19,15 +19,10 @@ classdef CControlGroup < handle
             CG.Parent = Parent;
         end
         
-        function hC = addControl(CG, Style, FuncCallback, String)
+        function hC = addControl(CG, Style, FuncCallback, String, Position)
             hC = uicontrol(CG.pan_handle, 'Style', Style, 'Units', 'pixels', 'Callback', FuncCallback, ...
-            'Position', [10 10 50 50], 'String', String);
+            'Position', Position, 'String', String);
         end
-        
-        function hC = addControl2(CG, Style, FuncCallback, String)
-            hC = uicontrol(CG.pan_handle, 'Style', Style, 'Units', 'pixels', 'Callback', FuncCallback, ...
-            'Position', [60 60 100 100], 'String', String);
-        end        
         
     end
     
